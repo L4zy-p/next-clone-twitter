@@ -1,16 +1,23 @@
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* @layer เหมือนการ อ้างอิงไปยัง base ของ tailwind */
+@layer base {
+  body {
+    /* @apply เหมือนการ เอา class ต่างๆ ของ tailwind มาใช้เพื่อ config */
+    @apply bg-black;
+  }
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+@layer components{
+  /* py-[...] หมายถึง padding ในแกน y คือ top และ bottom */
+  /* px-[...] หมายถึง padding ในแกน x คือ left และ right */
+  .hoverAnimation{
+    @apply hover:bg-[#d9d9d9] hover:bg-opacity-10 rounded-full
+    cursor-pointer w-[52px] h-[52px] xl:w-auto xl:h-auto xl:py-3 xl:px-4
+    transition duration-200 ease-out;
+  }
 }
 
-* {
-  box-sizing: border-box;
-}
+
