@@ -14,8 +14,8 @@ import {
   serverTimestamp,
   updateDoc
 } from '@firebase/firestore'
-
 import { getDownloadURL, ref, uploadString } from '@firebase/storage'
+import { useSession } from 'next-auth/react'
 
 import { db, storage } from '../firebase'
 
@@ -25,6 +25,7 @@ const Input = () => {
   const [showEmojis, setShowEmojis] = useState(false)
   const [loading, setLoading] = useState(false)
   const filePickerRef = useRef()
+  const { data: session } = useSession()
 
   const addEmoji = (e) => {
     // e เป็น object ที่มาจาก emoji picker และในนี้จะมี unified ที่แสดง code อยู่
@@ -58,10 +59,10 @@ const Input = () => {
 
     // addDoc น่าจะเหมือน Insert อ้างอิง colecction หรือ table จาก db และชื่อ colection
     const docRef = await addDoc(collection(db, 'posts'), {
-      // id: session.user.uid,
-      // username: session.user.name,
-      // userImg: session.user.image,
-      // tag: session.user.tag,
+      id: session?.user?.uid,
+      username: session?.user?.name,
+      userImg: session?.user?.image,
+      tag: session?.user?.tag,
       text: input,
       timestamp: serverTimestamp()
     })
@@ -111,7 +112,7 @@ const Input = () => {
     <div className={`border-b border-gray-700 p-3 flex space-x-3
     overflow-y-scroll ${loading && 'opacity-60'}`}>
       <img
-        src='https://lh3.googleusercontent.com/ogw/ADea4I6m4ISPB41dErVc4QxcFpHclSNH3mtu4UC-2Qxc=s32-c-mo'
+        src={session?.user?.image}
         alt='user'
         className='h-11 w-11 rounded-full cursor-pointer' />
 

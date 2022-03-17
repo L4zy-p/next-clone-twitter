@@ -1,9 +1,28 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { SparklesIcon } from '@heroicons/react/outline'
+import { useSession } from 'next-auth/react'
+import { onSnapshot, collection, query, orderBy } from '@firebase/firestore'
 
 import Input from './Input'
+import { db } from '../firebase'
+import Post from './Post'
 
 const Feed = () => {
+  const [posts, setPosts] = useState([])
+  const { data: session } = useSession()
+
+  useEffect(
+    () =>
+      onSnapshot(
+        query(collection(db, 'posts'), orderBy('timestamp', 'desc')),
+        (snapshot) => {
+          // onSnapshot เป็นตัวดักค่าและ error ที่ query ไป
+          setPosts(snapshot.docs)
+        }
+      ),
+    [db]
+  )
+
   return (
     <div className='text-white flex-grow border-l border-r 
     border-gray-700 max-w-2xl sm:ml-[73px] xl:ml-[370px]'>
@@ -20,6 +39,11 @@ const Feed = () => {
 
       <Input />
 
+      <div className='pb-72'>
+        {posts?.map(post => (
+          <Post key={post?.id} id={post.id} post={post.data()}/>
+        ))}
+      </div>
     </div>
   )
 }

@@ -11,10 +11,12 @@ import {
   DotsCircleHorizontalIcon,
   DotsHorizontalIcon
 } from '@heroicons/react/outline';
+import { useSession, signOut } from 'next-auth/react'
 
 import SidebarLink from './SidebarLink'
 
 const Sidebar = () => {
+  const { data: session } = useSession()
   return (
     <div className='hidden sm:flex flex-col items-center 
     xl:items-start xl:w-[340px] p-2 fixed h-full'>
@@ -41,18 +43,19 @@ const Sidebar = () => {
       rounded-full w-56 h-[52px] text-lg font-bold shadow-md hover:bg-[#1a8cd8]'>Tweet</button>
 
       <div className='text-[#d9d9d9] flex items-center justify-center
-    hoverAnimation xl:ml-auto xl:-mr-5 mt-auto'>
+    hoverAnimation xl:ml-auto xl:-mr-5 mt-auto'
+        onClick={signOut}>
         <img
-          src='https://lh3.googleusercontent.com/ogw/ADea4I6m4ISPB41dErVc4QxcFpHclSNH3mtu4UC-2Qxc=s32-c-mo'
-          alt='user'
+          src={session?.user?.image}
+          alt={session?.user?.name}
           className='h-10 w-10 rounded-full xl:mr-2.5' />
         <div className='hidden xl:inline leading-5'>
-          <h4 className='font-bold'>firebase 1875</h4>
-          <p className='text-[#6e767d]'>@firebase 1875</p>
+          <h4 className='font-bold'>{session?.user?.name}</h4>
+          <p className='text-[#6e767d]'>@{session?.user?.tag}</p>
         </div>
         <DotsHorizontalIcon className='h-5 hidden xl:inline ml-10' />
       </div>
-      
+
     </div>
   )
 }
