@@ -113,7 +113,7 @@ const Input = () => {
     overflow-y-scroll ${loading && 'opacity-60'}`}>
       <img
         src={session?.user?.image}
-        alt='user'
+        alt={session?.user?.image}
         className='h-11 w-11 rounded-full cursor-pointer' />
 
       {/* divide-y คือ การแบ่งระหว่าง แกน y ภายในลูก div ด้วย 1px นี้ 
