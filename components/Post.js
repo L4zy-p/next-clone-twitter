@@ -17,12 +17,12 @@ import { useRecoilState } from 'recoil'
 import { useRouter } from 'next/router'
 
 import { modalState, postIdState } from '../atoms/modalAtom'
-import { collection, deleteDoc, doc, onSnapshot, setDoc } from 'firebase/firestore'
+import { collection, deleteDoc, doc, onSnapshot, orderBy, query, setDoc } from 'firebase/firestore'
 import { db } from '../firebase'
 import Moment from 'react-moment'
 
 const Post = ({ id, post, postPage }) => {
-  const [comments, setCommemts] = useState([])
+  const [comments, setComments] = useState([])
   const [likes, setLikes] = useState([])
   const [liked, setLiked] = useState(false)
 
@@ -39,6 +39,18 @@ const Post = ({ id, post, postPage }) => {
   useEffect(() =>
     setLiked(likes?.findIndex(like => like.id === session?.user?.uid) !== -1)
     , [likes])
+
+  useEffect(
+    () =>
+      onSnapshot(
+        query(
+          collection(db, 'posts', id, 'comments'),
+          orderBy('timestamp', 'desc')
+        ),
+        (snapshot) => setComments(snapshot.docs)
+      ),
+    [db, id]
+  )
 
   const likePost = async () => {
     if (liked) {
@@ -110,6 +122,7 @@ const Post = ({ id, post, postPage }) => {
             <div className='icon group-hover:bg-[#1d9bf0] group-hover:bg-opacity-10'>
               <ChatIcon className='h-5 group-hover:text-[#1d9bf0]' />
             </div>
+            {console.log(comments)}
             {comments.length > 0 && (
               <span className='group-hover:text-[#1d9bf0] text-sm'>
                 {comments.length}

@@ -110,10 +110,10 @@ const Input = () => {
 
   return (
     <div className={`border-b border-gray-700 p-3 flex space-x-3
-    overflow-y-scroll ${loading && 'opacity-60'}`}>
+     ${loading && 'opacity-60'}`}>
       <img
         src={session?.user?.image}
-        alt={session?.user?.image}
+        alt={session?.user?.name}
         className='h-11 w-11 rounded-full cursor-pointer' />
 
       {/* divide-y คือ การแบ่งระหว่าง แกน y ภายในลูก div ด้วย 1px นี้ 

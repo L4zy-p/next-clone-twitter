@@ -2,10 +2,10 @@ import Head from 'next/head'
 import { getProviders, getSession, useSession } from 'next-auth/react'
 import { useRecoilState } from 'recoil'
 
-import { Sidebar, Feed, Login, Modal } from '../components'
+import { Sidebar, Feed, Login, Modal, Widgets } from '../components'
 import { modalState } from '../atoms/modalAtom'
 
-export default function Home({ tredingResults, followResults, providers }) {
+export default function Home({ trendingResults, followResults, providers }) {
   const { data: session } = useSession()
   const [isOpen, setIsOpen] = useRecoilState(modalState)
 
@@ -23,6 +23,10 @@ export default function Home({ tredingResults, followResults, providers }) {
       <main className='bg-black min-h-screen flex max-w-[1500px] mx-auto'>
         <Sidebar />
         <Feed />
+        <Widgets
+          trendingResults={trendingResults}
+          followResults={followResults}
+        />
         {
           isOpen && <Modal />
         }
@@ -33,7 +37,7 @@ export default function Home({ tredingResults, followResults, providers }) {
 
 
 export async function getServerSideProps(context) {
-  const tredingResults = await fetch('https://jsonkeeper.com/b/NKEV').then((res) => res.json())
+  const trendingResults = await fetch('https://jsonkeeper.com/b/NKEV').then((res) => res.json())
 
   const followResults = await fetch('https://jsonkeeper.com/b/WWMJ').then((res) => res.json())
 
@@ -47,7 +51,7 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
-      tredingResults,
+      trendingResults,
       followResults,
       providers,
       session
